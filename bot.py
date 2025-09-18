@@ -70,9 +70,9 @@ def send_welcome(message):
 
 ဆိုလာစနစ်တွက်ချက်မှုအတွက် အဆင့် ၅ ဆင့်ဖြင့် တွက်ချက်ပေးပါမယ်:
 
-1. စုစုပေါင်းစွမ်းအင်သုံး စွဲမှု
+1. စုစုပေါင်းစွမ်းအင်သုံးစွဲမှု
 2. ဘက်ထရီအရွယ်အစား
-3. ဆိုလာပြား လိုအပ်ချက်
+3. ဆိုလာပြားလိုအပ်ချက်
 4. အင်ဗာတာအရွယ်အစား
 5. *Charger Controller*
 
@@ -98,26 +98,7 @@ def start_calculation(message):
     try:
         user_data[message.chat.id] = {}
         
-        # Create keyboard for wattage knowledge - ဒီခလုတ်တွေကိုပြန်ထည့်ပေးထားပါတယ်
-        markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True, row_width=2)
-        buttons = [
-            types.KeyboardButton("သိပါသည်"),
-            types.KeyboardButton("မသိပါ")
-        ]
-        markup.add(*buttons)
-        
-        msg = bot.reply_to(message, "🔌 *သင့်စုစုပေါင်းဝပ်အား (W) ကိုသိပါသလား?*\n\nအောက်က လေးထောင့်ခလုတ်မှနှိပ်၍ ရွေးချယ်ပါ", reply_markup=markup, parse_mode='Markdown')
-        bot.register_next_step_handler(msg, handle_wattage_knowledge)
-    except Exception as e:
-        print("Error in calculate:", e)
-        bot.reply_to(message, "❌ အမှားတစ်ခုဖြစ်နေပါတယ်")
-
-@bot.message_handler(commands=['calculate'])
-def start_calculation(message):
-    try:
-        user_data[message.chat.id] = {}
-        
-        # Create keyboard for wattage knowledge - ဒီခလုတ်တွေကိုပြန်ထည့်ပေးထားပါတယ်
+        # Create keyboard for wattage knowledge
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True, row_width=2)
         buttons = [
             types.KeyboardButton("သိပါသည်"),
@@ -140,22 +121,48 @@ def handle_wattage_knowledge(message):
             msg = bot.reply_to(message, "🔌 *ကျေးဇူးပြု၍ စုစုပေါင်းဝပ်အား (W) ထည့်ပါ*\n\nဥပမာ: 500", reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
             bot.register_next_step_handler(msg, ask_usage_hours)
         elif response == "မသိပါ":
-            # Send wattage calculation guide
+            # Send detailed wattage calculation guide
             wattage_guide = """
 *အဆင့် 1- သင့်စွမ်းအင်သုံးစွဲမှုကို အကဲဖြတ်ခြင်း။*
 
-သင့်နေ့စဉ်စွမ်းအင်သုံးစွဲမှုကို တွက်ချက်နည်း:
+*ပစ္စည်းစာရင်းများကြည့်ရန်:*
 
-1. *သင့်စက်ပစ္စည်းများကို စာရင်းပြုစုပါ။* - မီးများ၊ ရေခဲသေတ္တာများ၊ လေအေးပေး စက်များ
+📺 *အအေးခံစက်များ:*
+- ပန်ကာတစ်လုံး: 50-100W
+- လေအေးပေးစက် (1 HP): 750-1000W
+- လေအေးပေး စက် (1.5 HP): 1200-1500W
 
-2. *Wattage ကိုစစ်ဆေးပါ။* - စက်ပစ္စည်းတိုင်းတွင် wattage အဆင့်ရှိသည်
+💡 *မီးအလင်းရောင်များ:*
+- LED မီးသီး 1လုံး: 5-15W
+- Fluorescent မီးသီး: 15-40W
+- Incandescent မီးသီး: 40-100W
 
-3. *နေ့စဉ်အသုံးပြုမှုကို တွက်ချက်ပါ။* - ဝပ်အား × အသုံးပြုသည့် နာရီ
+🍚 *မီးဖိုချောင်သုံးပစ္စည်းများ:*
+- မီးဖိုချောင်ပန်ကာ: 50-100W
+- မိုက်ခရိုဝေ့ဖ်: 800-1500W
+- လျှပ်စစ်အိုး: 1000-2000W
+- ရေနွေးအိုး: 1500-3000W
 
-*ဥပမာ:* 100 watt မီးသီးသည် 5 နာရီကြာအလုပ်လုပ်သည်-
-100W × 5 နာရီ = တစ်နေ့လျှင် 500Wh
+🧊 *ရေခဲသေတ္တာများ:*
+- Mini fridge: 50-100W
+- ပုံမှန်ရေခဲသေတ္တာ: 100-250W
+- နှစ်ထပ် ရေခဲသေတ္တာ: 150-300W
 
-🔌 *ကျေးဇူးပြု၍ စုစုပေါင်းဝပ်အား (W) ထည့်ပါ*\n\nဥပမာ: 500
+📱 *အီလက်ထရွန်နစ်ပစ္စည်းများ:*
+- ကွန်ပျူတာ: 50-250W
+- တီဗီ: 50-200W
+- ဖုန်းအားသွင်း: 5-25W
+
+*တွက်ချက်နည်း:*
+ဝပ်အား (W) × အသုံးပြုသည့် နာရီ (h) = ဝပ်နာရီ (Wh)
+
+*ဥပမာ ၁:* 100W မီးသီး ၅ လုံး ၄ နာရီသုံးလျှင်
+100W × 5 × 4h = 2000Wh
+
+*ဥပမာ ၂:* 1500W လေအေးပေးစက် ၆ နာရီသုံးလျှင်
+1500W × 6h = 9000Wh
+
+🔌 *ကျေးဇူးပြု၍ စုစုပေါင်းဝပ်အား (W) ထည့်ပါ*\n\nဥပမာ: 1500
             """
             msg = bot.reply_to(message, wattage_guide, parse_mode='Markdown', reply_markup=types.ReplyKeyboardRemove())
             bot.register_next_step_handler(msg, ask_usage_hours)
@@ -165,17 +172,18 @@ def handle_wattage_knowledge(message):
     except Exception as e:
         print("Error in handle_wattage_knowledge:", e)
         bot.reply_to(message, "❌ အမှားတစ်ခုဖြစ်နေပါတယ်")
+
 def ask_usage_hours(message):
     try:
         chat_id = message.chat.id
         total_w = int(message.text)
         
         if total_w <= 0:
-            bot.reply_to(message, "❌ ဝပ်အားသည် 0 ထက်ကြီးရပါမယ်")
+            bot.reply_to(message, "❌ ဝပ်အားသည် 0 ထက်ကြီး ရပါမယ်")
             return
             
         user_data[chat_id]['total_w'] = total_w
-        msg = bot.reply_to(message, f"⏰ *တစ်ရက်ကိုဘယ် နှနာရီသုံးမှာလဲ?*\n\nဥပမာ: 6", parse_mode='Markdown')
+        msg = bot.reply_to(message, f"⏰ *တစ်ရက်ကိုဘယ်နှနာရီသုံးမှာလဲ?*\n\nဥပမာ: 6", parse_mode='Markdown')
         bot.register_next_step_handler(msg, ask_battery_type)
     except ValueError:
         bot.reply_to(message, "❌ ကျေးဇူးပြု၍ ဂဏန်းမှန်မှန်ထည့်ပါ\n\nဥပမာ: 500")
@@ -202,7 +210,7 @@ def ask_battery_type(message):
         msg = bot.reply_to(message, "🔋 *ဘက်ထရီအမျိုးအစားရွေးချယ်ပါ*", reply_markup=markup, parse_mode='Markdown')
         bot.register_next_step_handler(msg, process_battery_type)
     except ValueError:
-        bot.reply_to(message, "❌ ကျေးဇူးပြု၍ ဂဏန်းမှန်မှန်ထည့်ပါ\n\nဥပမာ: 6")
+        bot.reply_to(message, "❌ ကျေးဇူးပြု၍ ဂဏန်းမှန် မှန်ထည့်ပါ\n\nဥပမာ: 6")
     except Exception as e:
         print("Error in ask_battery_type:", e)
         bot.reply_to(message, "❌ အမှားတစ်ခုဖြစ်နေပါတယ်")
@@ -251,7 +259,7 @@ def process_solar_panel(message):
         msg = bot.reply_to(message, "⚡ *ဘက်ထရီဗို့အားရွေးချယ်ပါ*", reply_markup=markup, parse_mode='Markdown')
         bot.register_next_step_handler(msg, process_battery_voltage)
     except ValueError:
-        bot.reply_to(message, "❌ ကျေးဇူးပြု၍ ပေးထားသော option များထဲကရွေးချယ်ပါ", reply_markup=types.ReplyKeyboardRemove())
+        bot.reply_to(message, "❌ ကျေးဇူးပြု၍ ပေးထားသော option များထဲကရွေးချ ်ပါ", reply_markup=types.ReplyKeyboardRemove())
     except Exception as e:
         print("Error in process_solar_panel:", e)
         bot.reply_to(message, "❌ အမှားတစ်ခုဖြစ်နေပါတယ်")
@@ -291,14 +299,14 @@ def process_battery_voltage(message):
         
 📝 *စွမ်းအင်သုံးစွဲမှုစာရင်း:*
 • *စုစုပေါင်းဝပ်အား:* {total_w}W
-• *နေ့စဉ်သုံးစွဲမည့်နာရီ:* {hours}h
+• *နေ့စဉ်သုံး စွဲမည့်နာရီ:* {hours}h
 • *စုစုပေါင်းစွမ်းအင်သုံးစွဲမှု:* {daily_wh:.0f} Wh/ရက်
 
 🔋 *ဘက်ထရီအရွယ်အစား:* _{battery_ah:.0f} Ah {battery_voltage}V_
    - {battery_type} ဘက်ထရီ (DOD: {dod_factor*100:.0f}%)
    - {battery_ah:.0f}Ah ဘက်ထရီ ၁လုံး (သို့) သေးငယ်သောဘက်ထရီများကို parallel ချိတ်ဆက်အသုံးပြုနိုင်သည်
 
-☀️ *ဆို လာပြားလိုအပ်ချက်:* _{solar_w:.0f} W_
+☀️ *ဆိုလာပြားလိုအပ်ချက်:* _{solar_w:.0f} W_
    - {panel_wattage}W ဆိုလာပြား {num_panels} ချပ်
 
 ⚡ *အင်ဗာတာအရွယ်အစား:* _{inverter_w:.0f} W Pure Sine Wave_
@@ -312,7 +320,7 @@ def process_battery_voltage(message):
         
         if battery_type.lower() == "lifepo4":
             result += """
-   - *LiFePO4 ဘက်ထရီများသည် သက်တမ်းရှည်ပြီး စိတ်ချရမှုရှိသည်*
+   - *LiFePO4 ဘက်ထရီများသည် သက်တမ်း ရှည်ပြီး စိတ်ချရမှုရှိသည်*
    - *80% Depth of Discharge အထိ အသုံးပြုနိုင်သည်*"""
         elif battery_type.lower() == "gel":
             result += """
@@ -321,13 +329,13 @@ def process_battery_voltage(message):
         else:
             result += f"""
    - *Lead-Acid ဘက်ထရီကို 50% ထက်ပို၍ မထုတ်သုံးသင့်ပါ*
-   - *ရေမှန်မှန်ဖြည့်ပေး ရန် လိုအပ်သည်*"""
+   - *ရေမှန်မှန်ဖြည့်ပေးရန် လိုအပ်သည်*"""
         
         # Create keyboard for recalculating options
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True, row_width=2)
         buttons = [
             types.KeyboardButton("🔋 ဘက်ထရီအမျိုးအစားပြန်ရွေးမယ်"),
-            types.KeyboardButton("☀️ ဆိုလာပြားပြန်ရွေး မယ်"),
+            types.KeyboardButton("☀️ ဆိုလာပြားပြန်ရွေးမယ်"),
             types.KeyboardButton("🔄 အားလုံးပြန်ရွေးမယ်"),
             types.KeyboardButton("❌ ထွက်မယ်")
         ]
@@ -354,7 +362,7 @@ def handle_recalculation(message):
             msg = bot.send_message(chat_id, "🔋 *ဘက်ထရီအမျိုးအစားအသစ်ရွေးချယ်ပါ*", reply_markup=markup, parse_mode='Markdown')
             bot.register_next_step_handler(msg, process_battery_type)
             
-        elif choice == "☀️ ဆိုလာပြားပြန်ရွေးမယ်":
+        elif choice == "☀️ ဆိုလာပြားပြန်ရွေး မယ်":
             # Create keyboard for solar panel selection
             markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True, row_width=3)
             buttons = [types.KeyboardButton(f"{wattage}W") for wattage in SOLAR_PANEL_WATTAGES]
@@ -363,7 +371,7 @@ def handle_recalculation(message):
             msg = bot.send_message(chat_id, "☀️ *ဆိုလာပြား Wattage အသစ်ရွေးချယ်ပါ*", reply_markup=markup, parse_mode='Markdown')
             bot.register_next_step_handler(msg, process_solar_panel)
             
-        elif choice == "🔄 အားလုံးပြန်ရွေးမယ်":
+        elif choice == "🔄 အားလုံးပြန်ရွေး မယ်":
             # Restart completely
             user_data[chat_id] = {}
             bot.send_message(chat_id, "🔄 *စနစ်အသစ်တွက်ချက်မည်*", parse_mode='Markdown', reply_markup=types.ReplyKeyboardRemove())
@@ -371,7 +379,7 @@ def handle_recalculation(message):
             bot.register_next_step_handler(msg, ask_usage_hours)
             
         elif choice == "❌ ထွက်မယ်":
-            bot.send_message(chat_id, "👋 *Hsu Cho Solar Calculator ကိုအသုံးပြုတဲ့အတွက်ကျေးဇူးတင်ပါတယ်!*\n\nမည်သည့်အချိန်မဆို /calculate ကိုရိုက်ပို့ပြီး ပြန် လည်တွက်ချက်နိုင်ပါတယ်။", parse_mode='Markdown', reply_markup=types.ReplyKeyboardRemove())
+            bot.send_message(chat_id, "👋 *Hsu Cho Solar Calculator ကိုအသုံးပြုတဲ့အတွက်ကျေးဇူးတင်ပါတယ်!*\n\nမည်သည့်အချိန် မဆို /calculate ကိုရိုက်ပို့ပြီး ပြန်လည်တွက်ချက်နိုင်ပါတယ်။", parse_mode='Markdown', reply_markup=types.ReplyKeyboardRemove())
             
         else:
             bot.send_message(chat_id, "❌ ကျေးဇူးပြု၍ ပေးထားသော option များထဲကရွေးချယ်ပါ")
