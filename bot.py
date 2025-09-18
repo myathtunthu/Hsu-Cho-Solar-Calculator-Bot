@@ -339,7 +339,7 @@ def process_calculation(message):
 ⚡ **အင်ဗာတာအရွယ်အစား:** {inverter_w:.0f} W Pure Sine Wave
    - စုစုပေါင်းဝပ်အားထက် 30% ပိုကြီးသော အင်ဗာတာရွေးချယ်ထားသည်
 
-🎛️ **ချားဂျီကွန်ထရိုလာ:** {controller_type} {controller_amps:.1f}A
+🎛️ **Charger Controller** {controller_type} {controller_amps:.1f}A
    - {controller_type} ကွန်ထရိုလာ {controller_amps:.1f}A အရွယ်အစား
 
 💡 **အထူးအကြံပြုချက်များ:"""
@@ -444,4 +444,5 @@ try:
     bot.polling(none_stop=True, interval=0, timeout=20)
 except Exception as e:
     print("Bot polling error:", e)
+
     time.sleep(5)
