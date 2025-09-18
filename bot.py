@@ -3,7 +3,7 @@ from telebot import types
 import time
 
 # ==================== YOUR BOT TOKEN ====================
-BOT_TOKEN = "8484357288:AAGM2TafS8FjLxZQ2gT1PVJ1prNepq-zuqc"
+BOT_TOKEN = "8234675036:AAFIWLxSxeaT0-VGt_wUwDySCJbHS_0NTN0"
 # ========================================================
 
 bot = telebot.TeleBot(BOT_TOKEN)
@@ -446,3 +446,4 @@ except Exception as e:
     print("Bot polling error:", e)
 
     time.sleep(5)
+
